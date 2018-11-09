@@ -43,9 +43,24 @@ class Member(Base):
     subscription_date = Column(Date, default=datetime.datetime.today().strftime('%Y-%m-%d'))
 
     def __init__(self, number, name, subscription_date=None):
+        """
+        Constructor.
+        Initialize any member instance when created.
+        :param number: the member number
+        :param name: the member name and surname
+        :param subscription_date: the subscription date
+        """
         self.number = number
         self.name = name
         self.subscription_date = subscription_date
+
+    def __eq__(self, other):
+        """
+        Equal to comparison method
+        :param other: the other instance to be compared to this
+        :return:  true if the member numbers are equal, false otherwise
+        """
+        return self.number == other.number
 
     def to_string(self):
         """
@@ -54,5 +69,5 @@ class Member(Base):
         """
         return "{ id: [" + str(self.member_id) + \
                "], number: [" + self.number.encode('utf-8').decode('utf-8') + \
-               "], name: [" + self.name.encode('utf-8').decode('utf-8') + \
+               "], name: [" + self.name + \
                "], subscription_date: [" + str(self.subscription_date) + "] }"

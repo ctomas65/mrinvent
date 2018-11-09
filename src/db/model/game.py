@@ -50,6 +50,14 @@ class Game(Base):
         self.year = value
 
     @property
+    def rank(self):
+        return self.rank
+
+    @rank.setter
+    def rank(self, value):
+        self.rank = value
+
+    @property
     def age(self):
         return self.age
 
@@ -158,6 +166,7 @@ class Game(Base):
     type = Column(Enum(u'BOARD', u'MINIATURES', u'RPG'), nullable=False)
     category = Column(String(45))
     year = Column(INTEGER(11))
+    rank = Column(INTEGER(11))
     age = Column(INTEGER(11))
     min_playtime = Column(INTEGER(11))
     max_playtime = Column(INTEGER(11))
@@ -178,19 +187,34 @@ class Game(Base):
     owner_member = relationship(u'Member', primaryjoin='Game.owner_member_id == Member.member_id')
     publisher = relationship(u'Publisher')
 
-    def __init__(self, title, type, category, year, age, min_playtime, max_playtime,
+    def __init__(self, title, type, category, year, rank, age, min_playtime, max_playtime,
                  min_players, max_players, suggested, publisher_id, lang_id,
                  owner_member_id, hired_member_id, location_id):
         """
-        Initialize the board game data
-        :param title: the title of the board game
+        Initialize the game data
+        :param title: the game title
+        :param type: the game type (boardgame, boardgameexpansion, rpgitem)
+        :param category: the game category
+        :param year: the publishing year of the game
+        :param rank: the game rank number
+        :param age: the game age rating
+        :param min_playtime: the minimum play time in hours
+        :param max_playtime: the maximum play time in hours
+        :param min_players: the minimum number of players
+        :param max_players: the maximum number of players
+        :param suggested: the suggested number of players
+        :param publisher_id: the game publisher database identifier
+        :param lang_id: the language dependence database identifier
+        :param owner_member_id: the database identifier of the owner member
+        :param hired_member_id: the database identifier of the member that hired the game
+        :param location_id: the database identifier of the game location (shelving)
         """
         self.title = title
         self.type = type
         self.category = category
         self.year = year
+        self.rank = rank
         self.age = age
-        self.publisher_id = publisher_id
         self.min_playtime = min_playtime
         self.max_playtime = max_playtime
         self.min_players = min_players
@@ -201,3 +225,25 @@ class Game(Base):
         self.owner_member_id = owner_member_id
         self.hired_member_id = hired_member_id
         self.location_id = location_id
+
+    def to_string(self):
+        """
+        Get the string representation of this game
+        :return: the string representation of this game
+        """
+        return "{ id: [" + str(self.game_id) + \
+               "], title: [" + self.title.encode('utf-8').decode('utf-8') + \
+               "], type: [" + self.name.encode('utf-8').decode('utf-8') + \
+               "], category: [" + self.category.encode('utf-8').decode('utf-8') + \
+               "], year: [" + str(self.year) + \
+               "], rank: [" + str(self.rank) + \
+               "], age: [" + str(self.age) + \
+               "], playtime: [" + str(self.min_playtime) + "-" + str(self.max_playtime) + \
+               "], players: [" + str(self.min_players) + "-" + str(self.max_players) + \
+               "], suggested: [" + str(self.suggested) + \
+               "], publisher_id: [" + str(self.publisher_id) + \
+               "], lang_id: [" + str(self.lang_id) + \
+               "], owner_member_id: [" + str(self.owner_member_id) + \
+               "], hired_member_id: [" + str(self.hired_member_id) + \
+               "], location_id: [" + str(self.location_id) + \
+               "] }"

@@ -34,7 +34,8 @@ class Location(Base):
 
     def __init__(self, shelving, comments=''):
         """
-        Initialize the game location
+        Constructor.
+        Initialize this game location when created
         :param shelving: the shelving number the game is located in
         :param comments: relevant comments related to the location
         """

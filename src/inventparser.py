@@ -75,7 +75,7 @@ class InventParser(object):
         owner_names = []
         if self.inventory is not None:
             owner_names = self.inventory['PROPIETARIO'].tolist()
-            owner_names = sorted(set([name.title() for name in owner_names]))
+            owner_names = sorted(set([name.title().encode('utf-8').decode('utf-8') for name in owner_names]))
         return owner_names
 
     def get_game_names(self):
@@ -88,10 +88,9 @@ class InventParser(object):
             game_list = self.inventory['NOMBRE DEL JUEGO'].tolist()
             for name in game_list:
                 if isinstance(name, (int, long, float)):
-                    game_names.append(str(name))
-                else:
-                    name = name.strip('\"').strip('\'')
-                    game_names.append(name.encode('utf-8'))
+                    name = str(name)
+                name = name.strip('\"').strip('\'')
+                game_names.append(name.encode('utf-8'))
             game_names = sorted(set(game_names))
         return game_names
 
